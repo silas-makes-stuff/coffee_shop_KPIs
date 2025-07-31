@@ -172,3 +172,220 @@ df.head()
 </table>
 </div>
 
+CLEANING
+
+```
+#double check null values, shows 89 blanks under card
+print(df.isnull().sum())
+
+#match null values to count of string cash in column cash type
+df['cash_type'].str.count('cash').sum()
+```
+
+date            0
+datetime        0
+hour_of_day     0
+cash_type       0
+card           89
+money           0
+coffee_name     0
+Time_of_Day     0
+Weekday         0
+Month_name      0
+Weekdaysort     0
+Monthsort       0
+dtype: int64
+
+np.int64(89)
+
+Blanks under Card match total number of string 'cash,' so we are good to go. Time to do some conversions and set some data types.
+
+```
+#convert dates to datetime
+df['date'] = pd.to_datetime(df['date'])
+df['datetime'] = pd.to_datetime(df['datetime'])
+
+#drop failed rows and reset index
+df = df.dropna(subset=['date', 'datetime'])
+df = df.reset_index(drop=True)
+
+# cleaning, removes strings
+cat_cols= ['cash_type', 'card', 'coffee_name', 'Time_of_Day', 'Weekday', 'Month_name' ]
+for col in cat_cols:
+    df[col] = df[col].astype(str).str.strip()
+num_cols= ['date','datetime','money','hour_of_day', 'Weekdaysort','Monthsort']
+print("Categorical Variables: ")
+print(cat_cols)
+print("Numberical Variables:")
+print(num_cols)
+```
+Categorical Variables: 
+['cash_type', 'card', 'coffee_name', 'Time_of_Day', 'Weekday', 'Month_name']
+Numberical Variables:
+['date', 'datetime', 'money', 'hour_of_day', 'Weekdaysort', 'Monthsort']
+
+```
+#extracting year, mo, hour
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['day'] = df['date'].dt.day
+df['weekday'] = df['date'].dt.weekday
+
+df.head()
+```
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>datetime</th>
+      <th>hour_of_day</th>
+      <th>cash_type</th>
+      <th>card</th>
+      <th>money</th>
+      <th>coffee_name</th>
+      <th>Time_of_Day</th>
+      <th>Weekday</th>
+      <th>Month_name</th>
+      <th>Weekdaysort</th>
+      <th>Monthsort</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>weekday</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2024-03-01</td>
+      <td>2024-03-01 10:15:00</td>
+      <td>10</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0001</td>
+      <td>$2.18</td>
+      <td>Latte</td>
+      <td>Morning</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2024</td>
+      <td>3</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2024-03-01</td>
+      <td>2024-03-01 12:19:00</td>
+      <td>12</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0002</td>
+      <td>$2.18</td>
+      <td>Hot Chocolate</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2024</td>
+      <td>3</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2024-03-01</td>
+      <td>2024-03-01 12:20:00</td>
+      <td>12</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0002</td>
+      <td>$2.18</td>
+      <td>Hot Chocolate</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2024</td>
+      <td>3</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2024-03-01</td>
+      <td>2024-03-01 13:46:00</td>
+      <td>13</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0003</td>
+      <td>$1.63</td>
+      <td>Americano</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2024</td>
+      <td>3</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2024-03-01</td>
+      <td>2024-03-01 13:48:00</td>
+      <td>13</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0004</td>
+      <td>$2.18</td>
+      <td>Latte</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+      <td>2024</td>
+      <td>3</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+EXPLORATORY DATA ANALYSIS
+Initial boxplot was innacurate do to 'money' outlier 
+
+```
+#convert money to remove dollar signs so that the program doesn't crash out
+df['money'] = df['money'].replace('[\$,]', '', regex=True).astype(float)
+
+#remove outlier
+df = df[df['money'] != df['money'].max()]
+
+#calculate boxplot stats 
+q1, median, q3 = np.percentile(df['money'], [25, 50, 75])
+iqr = q3 - q1
+lower_whisker = max(df['money'].min(), q1 - 1.5 * iqr)
+upper_whisker = min(df['money'].max(), q3 + 1.5 * iqr)
+
+print(lower_whisker, q1, median, q3, upper_whisker)
+```
+
+Whoops! After a frustrating series of events, we've discovered that we are removing the maximum value EVERY TIME, changing the calculation.  
