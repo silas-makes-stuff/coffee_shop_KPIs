@@ -43,3 +43,132 @@ Peak Time, Day of Week
 
 Revenue by Time of Day
 <img width="804" height="1129" alt="image" src="https://github.com/user-attachments/assets/ae793c03-158a-4486-bb57-aaf3d89c4706" />
+
+NOW LET'S DO SOME PYTHON
+
+Set up Data Frame
+
+```
+# import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+import warnings
+
+#silence warnings
+warnings.filterwarnings("ignore")
+
+#set up data frame
+url = "https://raw.githubusercontent.com/silas-makes-stuff/coffee_shop_KPIs/main/coffee_sales_clean.csv"
+df = pd.read_csv(url)
+
+#drop extra columns 
+df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+
+#show first few lines of data
+df.head()
+```
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>datetime</th>
+      <th>hour_of_day</th>
+      <th>cash_type</th>
+      <th>card</th>
+      <th>money</th>
+      <th>coffee_name</th>
+      <th>Time_of_Day</th>
+      <th>Weekday</th>
+      <th>Month_name</th>
+      <th>Weekdaysort</th>
+      <th>Monthsort</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3/1/2024</td>
+      <td>3/1/24 10:15</td>
+      <td>10</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0001</td>
+      <td>$2.18</td>
+      <td>Latte</td>
+      <td>Morning</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3/1/2024</td>
+      <td>3/1/24 12:19</td>
+      <td>12</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0002</td>
+      <td>$2.18</td>
+      <td>Hot Chocolate</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3/1/2024</td>
+      <td>3/1/24 12:20</td>
+      <td>12</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0002</td>
+      <td>$2.18</td>
+      <td>Hot Chocolate</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3/1/2024</td>
+      <td>3/1/24 13:46</td>
+      <td>13</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0003</td>
+      <td>$1.63</td>
+      <td>Americano</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3/1/2024</td>
+      <td>3/1/24 13:48</td>
+      <td>13</td>
+      <td>card</td>
+      <td>ANON-0000-0000-0004</td>
+      <td>$2.18</td>
+      <td>Latte</td>
+      <td>Afternoon</td>
+      <td>Fri</td>
+      <td>Mar</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
