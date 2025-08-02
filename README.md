@@ -475,3 +475,8 @@ plt.xticks(rotation=80, fontsize=8)
 plt.show()
 ```
 <Figure size 640x480 with 1 Axes><img width="630" height="569" alt="image" src="https://github.com/user-attachments/assets/afd6a7c7-6d7a-4b1e-b387-468ab9725596" />
+
+Average Revenue by Hour helps with staffing/scheduling as well, and considers any events or specials which could run when the shop is slow.
+
+<Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/117666f4-592a-4115-b6f6-ab63ab13db17" />
+
