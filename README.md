@@ -478,5 +478,18 @@ plt.show()
 
 Average Revenue by Hour helps with staffing/scheduling as well, and considers any events or specials which could run when the shop is slow.
 
+```
+df_filtered['date'] = df_filtered['datetime'].dt.date
+sales_hour_day = df_filtered.groupby(['date', 'hour_of_day'])['money'].sum().reset_index()
+avg_sales_hour = sales_hour_day.groupby('hour_of_day')['money'].mean().reset_index()
+
+sns.barplot(x='hour_of_day', y='money', data=avg_sales_hour, ci=None, color= 'skyblue')
+plt.title('Avg Revenue By Hour')
+plt.xlabel('Hour of Day')
+plt.ylabel('Avg Sales (USD)')
+plt.tight_layout()
+plt.show()
+```
+
 <Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/117666f4-592a-4115-b6f6-ab63ab13db17" />
 
