@@ -389,3 +389,54 @@ print(lower_whisker, q1, median, q3, upper_whisker)
 ```
 
 Whoops! After a frustrating series of events, we've discovered that we are removing the maximum value EVERY TIME, changing the calculation.  
+
+Let's back up. We can't just drop the max value, because when we run it again, it just keeps chopping off the top and switching up our data. Let's try something else. To the previous cell, I filtered the dataset using a Boolean. 
+
+```
+#convert money to remove dollar signs so that the program doesn't crash out
+df['money'] = df['money'].replace('[\$,]', '', regex=True).astype(float)
+
+# save orginal data
+df_og = df.copy()
+
+print(df_og['money'].max())
+
+column_check = 'money'
+number_drop = 35.76
+
+df_filtered = df[df[column_check] != number_drop]
+
+print(df_filtered['money'].max())
+```
+35.76
+2.25
+
+Beautiful. Now the filtered dataset has dropped that outlier. Now let's run the modified calculations.
+
+```
+#calculate boxplot stats 
+q1, median, q3 = np.percentile(df_filtered['money'], [25, 50, 75])
+iqr = q3 - q1
+lower_whisker = max(df_filtered['money'].min(), q1 - 1.5 * iqr)
+upper_whisker = min(df_filtered['money'].max(), q3 + 1.5 * iqr)
+
+print(lower_whisker, q1, median, q3, upper_whisker)
+```
+1.02 1.57 1.85 2.02 2.25
+
+I am certain there must be a way to calculate the above values within the code for the boxplot (below). However, using sns I couldn't find a way to do so that accurately reflected the x-tick positions. In previous iterations I'd end up with an x-axis that was inaccurate in positioning, or numbers which overlapped chaotically, or numbers which were accurate in position but incorrect in calculation. So, after several tries, I landed on doing the calculations mannually and using custom labels for the boxplot. 
+
+```
+sns.set_style("whitegrid")
+sns.boxplot(x=df_filtered["money"]).set(title = 'Distribution of Sales')
+plt.xticks(
+    ticks=[lower_whisker, q1, median, q3, upper_whisker],
+    labels=["$1.02", "$1.57", "$1.85", "$2.02", "$2.25"]
+)
+
+plt.show()
+```
+
+<Figure size 640x480 with 1 Axes><img width="515" height="455" alt="image" src="https://github.com/user-attachments/assets/00f24955-fdf0-4a92-b0cc-559a87783f91" />
+
+
