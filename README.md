@@ -439,4 +439,38 @@ plt.show()
 
 <Figure size 640x480 with 1 Axes><img width="515" height="455" alt="image" src="https://github.com/user-attachments/assets/00f24955-fdf0-4a92-b0cc-559a87783f91" />
 
+Now we've seen the distribution of individual purchases. Let's look at sales over time. 
 
+```
+#sum sales by day
+daily_total = df.groupby('date')['money'].sum().reset_index()
+sns.set_style("whitegrid")
+sns.lineplot(x='date', y='money', data=daily_total) 
+plt.title('Total Sales Over Time')
+plt.xlabel('Date')
+plt.ylabel('Daily Sales (money)')
+plt.tight_layout()
+plt.show()
+```
+<Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/e0ce3e9e-3278-451a-be65-8d8ccf09ebb0" />
+
+Next, let's look at most popular drinks. This will help with inventory, inform any specials, etc. 
+
+```
+#most popular drinks
+
+#count drink totals
+count_drinks = df['coffee_name'].value_counts()
+
+#pre-set data to be in descending order
+df['coffee_name'] = pd.Categorical(df['coffee_name'], categories=count_drinks.index, ordered=True)
+
+sns.histplot(data=df, x='coffee_name', color = 'blue')
+plt.title('Most Popular Drinks')
+plt.xlabel('Coffee Name')
+plt.ylabel('Frequency')
+plt.grid(True)
+plt.tight_layout()
+plt.xticks(rotation=80, fontsize=8)
+plt.show()
+```
