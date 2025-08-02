@@ -474,3 +474,4 @@ plt.tight_layout()
 plt.xticks(rotation=80, fontsize=8)
 plt.show()
 ```
+<Figure size 640x480 with 1 Axes><img width="630" height="569" alt="image" src="https://github.com/user-attachments/assets/afd6a7c7-6d7a-4b1e-b387-468ab9725596" />
