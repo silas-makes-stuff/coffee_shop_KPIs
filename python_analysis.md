@@ -1,7 +1,7 @@
 # coffee_shop_KPIs
 
 
-
+```
 #Set up Data Frame
 # import necessary libraries
 
@@ -28,7 +28,6 @@ df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
 #show first few lines of data
 df.head()
-
 ```
 <table border="1" class="dataframe">
   <thead>
