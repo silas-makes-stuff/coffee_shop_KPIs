@@ -1,13 +1,10 @@
 # coffee_shop_KPIs
 
-OBTAINED DATA FROM https://www.kaggle.com/datasets/reignrichard/coffee-store-sales/data 
 
-NOW LET'S DO SOME PYTHON
 
-Set up Data Frame
-
-```
+#Set up Data Frame
 # import necessary libraries
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,6 +28,7 @@ df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
 #show first few lines of data
 df.head()
+
 ```
 <table border="1" class="dataframe">
   <thead>
