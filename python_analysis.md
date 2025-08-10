@@ -443,3 +443,75 @@ plt.show()
 
 <Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/117666f4-592a-4115-b6f6-ab63ab13db17" />
 
+Correlations of numeric variables
+
+```
+df_numeric = df.select_dtypes(include=[float, int])
+correlation_matrix = df_numeric.corr()
+
+print(correlation_matrix)
+```
+hour_of_day     money  Weekdaysort  Monthsort      year  \
+hour_of_day     1.000000  0.100106    -0.005423   0.012870 -0.045488   
+money           0.100106  1.000000     0.018617  -0.042064  0.006439   
+Weekdaysort    -0.005423  0.018617     1.000000   0.041689 -0.067836   
+Monthsort       0.012870 -0.042064     0.041689   1.000000 -0.725960   
+year           -0.045488  0.006439    -0.067836  -0.725960  1.000000   
+month           0.012870 -0.042064     0.041689   1.000000 -0.725960   
+day             0.015518  0.002162    -0.030948   0.028615 -0.080394   
+weekday        -0.005423  0.018617     1.000000   0.041689 -0.067836   
+
+                month       day   weekday  
+hour_of_day  0.012870  0.015518 -0.005423  
+money       -0.042064  0.002162  0.018617  
+Weekdaysort  0.041689 -0.030948  1.000000  
+Monthsort    1.000000  0.028615  0.041689  
+year        -0.725960 -0.080394 -0.067836  
+month        1.000000  0.028615  0.041689  
+day          0.028615  1.000000 -0.030948  
+weekday      0.041689 -0.030948  1.000000
+
+
+Scatterplot reflecting coorelation between Hour of Day and Money 
+
+```
+sns.regplot(x='hour_of_day', y='money', data=df_filtered, scatter=True, color = 'skyblue', line_kws={'color': 'blue'})
+plt.title('Correlation Between Hour of Day and Money')
+plt.xlabel('Hour of Day')
+plt.ylabel('Money')
+plt.grid(True)
+plt.xticks(range(6, 22))
+plt.tight_layout()
+plt.show()
+```
+<Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/8426f3ee-eb95-4533-ae27-fba712ddd261" />
+
+Heat map avg money by day of week/hour
+
+```
+pivot_table = df_filtered.pivot_table(values='money', index='weekday', columns='hour_of_day', aggfunc='mean')
+plt.figure(figsize=(14, 6))
+sns.heatmap(pivot_table, cmap='YlGnBu', linewidths=0.5, annot=True, fmt='.1f')
+plt.title('Average Money Spent by Day of Week & Hour')
+plt.xlabel('Hour of Day')
+plt.ylabel('Day of Week')
+plt.tight_layout()
+plt.show()
+```
+
+<Figure size 1400x600 with 2 Axes><img width="1256" height="590" alt="image" src="https://github.com/user-attachments/assets/fe97ac27-858e-4311-aba2-8e91a8186b45" />
+
+Heat map avg money, month and day of week
+
+```
+pivot_table = df_filtered.pivot_table(values='money', index='month_name', columns='weekday', aggfunc='mean')
+plt.figure(figsize=(14, 6))
+sns.heatmap(pivot_table, cmap='YlGnBu', linewidths=0.5, annot=True, fmt='.1f')
+plt.title('Average Money Spent by Month & Day of Week')
+plt.xlabel('Day of Week')
+plt.ylabel('Month')
+plt.tight_layout()
+plt.show()
+```
+
+<Figure size 1400x600 with 2 Axes><img width="1257" height="590" alt="image" src="https://github.com/user-attachments/assets/580ae2bd-831c-4b01-b48d-16c700c44c40" />
