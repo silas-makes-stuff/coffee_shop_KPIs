@@ -198,7 +198,8 @@ df.head()
     .dataframe thead th {
         text-align: right;
     }
-    
+```
+
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -321,8 +322,6 @@ df.head()
   </tbody>
 </table>
 </div>
-
-```
 
 ## EXPLORATORY DATA ANALYSIS
 
