@@ -1,15 +1,15 @@
-
-
-OBTAINED DATA FROM https://www.kaggle.com/datasets/reignrichard/coffee-store-sales/data 
-
 # coffee_shop_KPIs
 
 ## **Goal**
-1. Practice some basic Excel EDA
-2. Data analysis using Python
+Clean, transform, analyze and visualize coffee shop data for Key Performance Indicators.
+
+OBTAINED DATA FROM https://www.kaggle.com/datasets/reignrichard/coffee-store-sales/data 
 
 Examined
-
+1. Total sales over time
+2. Relationship between sales and hour of day, day of week
+3. Distribution of average transcation
+4. Most popular products
 
 ## Description
 
