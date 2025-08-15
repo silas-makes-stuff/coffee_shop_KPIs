@@ -1,6 +1,6 @@
 # coffee_shop_KPIs
 
-##Set up Data Frame, Libraries
+## Set up Data Frame, Libraries
 
 ```
 #Set up Data Frame
@@ -123,7 +123,7 @@ df.head()
 </table>
 </div>
 
-##Data Cleaning
+## Data Cleaning
 
 ```
 #double check null values, shows 89 blanks under card
@@ -184,7 +184,7 @@ df['day'] = df['date'].dt.day
 df['weekday'] = df['date'].dt.weekday
 
 df.head()
-```
+
 <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -198,6 +198,7 @@ df.head()
     .dataframe thead th {
         text-align: right;
     }
+    
 </style>
 <table border="1" class="dataframe">
   <thead>
@@ -321,7 +322,9 @@ df.head()
 </table>
 </div>
 
-##EXPLORATORY DATA ANALYSIS
+```
+
+## EXPLORATORY DATA ANALYSIS
 
 Filtered the dataset using a Boolean to remove outlier. 
 
@@ -374,7 +377,7 @@ plt.show()
 
 Now we've seen the distribution of individual purchases. Let's look at sales over time. 
 
-##SALES OVER TIME
+## SALES OVER TIME
 
 ```
 #sum sales by day
@@ -391,7 +394,7 @@ plt.show()
 
 Next, let's look at most popular drinks. This will help with inventory, inform any specials, etc. 
 
-##MOST POPULAR DRINKS
+## MOST POPULAR DRINKS
 
 ```
 #most popular drinks
@@ -413,7 +416,7 @@ plt.show()
 ```
 <Figure size 640x480 with 1 Axes><img width="630" height="569" alt="image" src="https://github.com/user-attachments/assets/afd6a7c7-6d7a-4b1e-b387-468ab9725596" />
 
-##AVG REVENUE PER HOUR 
+## AVG REVENUE PER HOUR 
 
 ```
 df_filtered['date'] = df_filtered['datetime'].dt.date
@@ -472,7 +475,7 @@ plt.show()
 ```
 <Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/8426f3ee-eb95-4533-ae27-fba712ddd261" />
 
-##HEAT MAP avg money by day of week/hour
+## HEAT MAP avg money by day of week/hour
 
 ```
 pivot_table = df_filtered.pivot_table(values='money', index='weekday', columns='hour_of_day', aggfunc='mean')
@@ -487,7 +490,7 @@ plt.show()
 
 <Figure size 1400x600 with 2 Axes><img width="1256" height="590" alt="image" src="https://github.com/user-attachments/assets/fe97ac27-858e-4311-aba2-8e91a8186b45" />
 
-##HEAT MAP avg money, month and day of week
+## HEAT MAP avg money, month and day of week
 
 ```
 pivot_table = df_filtered.pivot_table(values='money', index='month_name', columns='weekday', aggfunc='mean')
