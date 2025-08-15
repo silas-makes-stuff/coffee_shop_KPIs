@@ -134,19 +134,20 @@ df['cash_type'].str.count('cash').sum()
 
 ```
 
-date            0
-datetime        0
-hour_of_day     0
-cash_type       0
-card           89
-money           0
-coffee_name     0
-Time_of_Day     0
-Weekday         0
-Month_name      0
-Weekdaysort     0
-Monthsort       0
-dtype: int64
+| Column         | Missing Values |
+|----------------|----------------|
+| date           | 0              |
+| datetime       | 0              |
+| hour_of_day    | 0              |
+| cash_type      | 0              |
+| card           | 89             |
+| money          | 0              |
+| coffee_name    | 0              |
+| Time_of_Day    | 0              |
+| Weekday        | 0              |
+| Month_name     | 0              |
+| Weekdaysort    | 0              |
+| Monthsort      | 0              |
 
 np.int64(89)
 
@@ -199,8 +200,6 @@ df.head()
         text-align: right;
     }
 ```
-
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -432,33 +431,25 @@ plt.show()
 
 <Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/117666f4-592a-4115-b6f6-ab63ab13db17" />
 
-Correlations of numeric variables
+## Correlations of numeric variables
 
 ```
 df_numeric = df.select_dtypes(include=[float, int])
 correlation_matrix = df_numeric.corr()
 
 print(correlation_matrix)
-```
-hour_of_day     money  Weekdaysort  Monthsort      year  \
-hour_of_day     1.000000  0.100106    -0.005423   0.012870 -0.045488   
-money           0.100106  1.000000     0.018617  -0.042064  0.006439   
-Weekdaysort    -0.005423  0.018617     1.000000   0.041689 -0.067836   
-Monthsort       0.012870 -0.042064     0.041689   1.000000 -0.725960   
-year           -0.045488  0.006439    -0.067836  -0.725960  1.000000   
-month           0.012870 -0.042064     0.041689   1.000000 -0.725960   
-day             0.015518  0.002162    -0.030948   0.028615 -0.080394   
-weekday        -0.005423  0.018617     1.000000   0.041689 -0.067836   
 
-                month       day   weekday  
-hour_of_day  0.012870  0.015518 -0.005423  
-money       -0.042064  0.002162  0.018617  
-Weekdaysort  0.041689 -0.030948  1.000000  
-Monthsort    1.000000  0.028615  0.041689  
-year        -0.725960 -0.080394 -0.067836  
-month        1.000000  0.028615  0.041689  
-day          0.028615  1.000000 -0.030948  
-weekday      0.041689 -0.030948  1.000000
+```
+|               | hour_of_day | money    | Weekdaysort | Monthsort | year     | month    | day      | weekday  |
+|---------------|-------------|----------|-------------|-----------|----------|----------|----------|----------|
+| hour_of_day   | 1.000000    | 0.100106 | -0.005423   | 0.012870  | -0.045488| 0.012870 | 0.015518 | -0.005423|
+| money         | 0.100106    | 1.000000 | 0.018617    | -0.042064 | 0.006439 | -0.042064| 0.002162 | 0.018617 |
+| Weekdaysort   | -0.005423   | 0.018617 | 1.000000    | 0.041689  | -0.067836| 0.041689 | -0.030948| 1.000000 |
+| Monthsort     | 0.012870    | -0.042064| 0.041689    | 1.000000  | -0.725960| 1.000000 | 0.028615 | 0.041689 |
+| year          | -0.045488   | 0.006439 | -0.067836   | -0.725960 | 1.000000 | -0.725960| -0.080394| -0.067836|
+| month         | 0.012870    | -0.042064| 0.041689    | 1.000000  | -0.725960| 1.000000 | 0.028615 | 0.041689 |
+| day           | 0.015518    | 0.002162 | -0.030948   | 0.028615  | -0.080394| 0.028615 | 1.000000 | -0.030948|
+| weekday       | -0.005423   | 0.018617 | 1.000000    | 0.041689  | -0.067836| 0.041689 | -0.030948| 1.000000 |
 
 ##COORELATION, Hour of Day and Money 
 
