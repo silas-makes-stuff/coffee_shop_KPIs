@@ -1,5 +1,6 @@
 # coffee_shop_KPIs
 
+##Set up Data Frame, Libraries
 
 ```
 #Set up Data Frame
@@ -122,7 +123,7 @@ df.head()
 </table>
 </div>
 
-CLEANING
+##Data Cleaning
 
 ```
 #double check null values, shows 89 blanks under card
@@ -130,6 +131,7 @@ print(df.isnull().sum())
 
 #match null values to count of string cash in column cash type
 df['cash_type'].str.count('cash').sum()
+
 ```
 
 date            0
@@ -319,31 +321,12 @@ df.head()
 </table>
 </div>
 
-EXPLORATORY DATA ANALYSIS
-Initial boxplot was innacurate do to 'money' outlier 
+##EXPLORATORY DATA ANALYSIS
+
+Filtered the dataset using a Boolean to remove outlier. 
 
 ```
-#convert money to remove dollar signs so that the program doesn't crash out
-df['money'] = df['money'].replace('[\$,]', '', regex=True).astype(float)
-
-#remove outlier
-df = df[df['money'] != df['money'].max()]
-
-#calculate boxplot stats 
-q1, median, q3 = np.percentile(df['money'], [25, 50, 75])
-iqr = q3 - q1
-lower_whisker = max(df['money'].min(), q1 - 1.5 * iqr)
-upper_whisker = min(df['money'].max(), q3 + 1.5 * iqr)
-
-print(lower_whisker, q1, median, q3, upper_whisker)
-```
-
-Whoops! After a frustrating series of events, we've discovered that we are removing the maximum value EVERY TIME, changing the calculation.  
-
-Let's back up. We can't just drop the max value, because when we run it again, it just keeps chopping off the top and switching up our data. Let's try something else. To the previous cell, I filtered the dataset using a Boolean. 
-
-```
-#convert money to remove dollar signs so that the program doesn't crash out
+#convert money to remove dollar sign
 df['money'] = df['money'].replace('[\$,]', '', regex=True).astype(float)
 
 # save orginal data
@@ -391,6 +374,8 @@ plt.show()
 
 Now we've seen the distribution of individual purchases. Let's look at sales over time. 
 
+##SALES OVER TIME
+
 ```
 #sum sales by day
 daily_total = df.groupby('date')['money'].sum().reset_index()
@@ -405,6 +390,8 @@ plt.show()
 <Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/e0ce3e9e-3278-451a-be65-8d8ccf09ebb0" />
 
 Next, let's look at most popular drinks. This will help with inventory, inform any specials, etc. 
+
+##MOST POPULAR DRINKS
 
 ```
 #most popular drinks
@@ -426,7 +413,7 @@ plt.show()
 ```
 <Figure size 640x480 with 1 Axes><img width="630" height="569" alt="image" src="https://github.com/user-attachments/assets/afd6a7c7-6d7a-4b1e-b387-468ab9725596" />
 
-Average Revenue by Hour helps with staffing/scheduling as well, and considers any events or specials which could run when the shop is slow.
+##AVG REVENUE PER HOUR 
 
 ```
 df_filtered['date'] = df_filtered['datetime'].dt.date
@@ -471,8 +458,7 @@ month        1.000000  0.028615  0.041689
 day          0.028615  1.000000 -0.030948  
 weekday      0.041689 -0.030948  1.000000
 
-
-Scatterplot reflecting coorelation between Hour of Day and Money 
+##COORELATION, Hour of Day and Money 
 
 ```
 sns.regplot(x='hour_of_day', y='money', data=df_filtered, scatter=True, color = 'skyblue', line_kws={'color': 'blue'})
@@ -486,7 +472,7 @@ plt.show()
 ```
 <Figure size 640x480 with 1 Axes><img width="630" height="470" alt="image" src="https://github.com/user-attachments/assets/8426f3ee-eb95-4533-ae27-fba712ddd261" />
 
-Heat map avg money by day of week/hour
+##HEAT MAP avg money by day of week/hour
 
 ```
 pivot_table = df_filtered.pivot_table(values='money', index='weekday', columns='hour_of_day', aggfunc='mean')
@@ -501,7 +487,7 @@ plt.show()
 
 <Figure size 1400x600 with 2 Axes><img width="1256" height="590" alt="image" src="https://github.com/user-attachments/assets/fe97ac27-858e-4311-aba2-8e91a8186b45" />
 
-Heat map avg money, month and day of week
+##HEAT MAP avg money, month and day of week
 
 ```
 pivot_table = df_filtered.pivot_table(values='money', index='month_name', columns='weekday', aggfunc='mean')
