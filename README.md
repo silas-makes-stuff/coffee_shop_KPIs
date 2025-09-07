@@ -46,9 +46,9 @@ df['cash_type'].str.count('cash').sum()
 - sns.histplot for most popular products
 - sns.barplot for avg revenue per hour
 - calculated correlations df_numeric.corr()
--- sns.regplot() money by hour of day
--- sns.heatmap() money by day of week/hour
--- sns.heatmap() money by month, day of week
+- sns.regplot() money by hour of day
+- sns.heatmap() money by day of week/hour
+- sns.heatmap() money by month, day of week
 
 ## Overall
 
