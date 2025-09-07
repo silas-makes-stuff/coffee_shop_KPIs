@@ -25,10 +25,10 @@ Excel, Python
 ## Excel 
 Used conditional formatting to check for blanks, then COUNTBLANK to confirm blank cells under 'money' matched 'cash.' Used FILTER, COUNTIF to check for duplicates. Converted ZAR to USD XE.com conversion 0.056353407 US Dollar =F2-F3637 * 0.056352149. Converted Datetime from string to date/time formatting. From here, I converted to table and conducted exploratory data analysis using PivotTables. 
 
-Line graph - Sales over time
-Histogram - 7 most ordered drinks
-Bar graph - Avg Revenue by day of week, then by weekday and time of day
-Boxplot - Avg Revenue by Morning, Afternoon, Night
+- Line graph - Sales over time
+- Histogram - 7 most ordered drinks
+- Bar graph - Avg Revenue by day of week, then by weekday and time of day
+- Boxplot - Avg Revenue by Morning, Afternoon, Night
 
 ## Python
 
