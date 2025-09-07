@@ -50,11 +50,12 @@ df['cash_type'].str.count('cash').sum()
 - sns.heatmap() money by day of week/hour
 - sns.heatmap() money by month, day of week
 
-## Overall
+## Conclusions and Recommendations
 
-
-## Calculations
-
+- Average individual transaction is $1.85 and revenue per hour peaks at 9pm. Tuesdays are the most profitible day overall, returning the most in the morning and evenings, with Saturday returning more in the afternoons.
+- There is a positive coorelation between hour of day and average money spent, with a peak at 7pm on Wednesdays.
+- Customers spend the least amount of money per transaction in August, July, and September. 
+- Most popular drink is a Americano with Milk followed closely by Latte.
 
   # Dashboards
 
@@ -69,4 +70,8 @@ df['cash_type'].str.count('cash').sum()
 
   # Reflections and Future Directions
 
-
+## Investigate 
+- Higher average transactions later in the day. Are customers buying more than one coffee (there with a friend) or buying a pastry with their coffee? This could help inform specials or products to push around this time.
+- Most popular drinks on Saturday afternoons, consider pushing a new menu item or pastry to maximize sales.
+- How to increase traffic and sales from 8-11am. If people are at work during this time, consider advertising free WiFi or a discount to come work in the shop.
+- Pricing of most popular drinks during August, July, September (colder and rainier months). Sales on Hot Chocolate and Cocoa are low overall, maybe pushing for shots of flavors in these drinks during cold months would increase average sales. 
