@@ -451,7 +451,7 @@ print(correlation_matrix)
 | day           | 0.015518    | 0.002162 | -0.030948   | 0.028615  | -0.080394| 0.028615 | 1.000000 | -0.030948|
 | weekday       | -0.005423   | 0.018617 | 1.000000    | 0.041689  | -0.067836| 0.041689 | -0.030948| 1.000000 |
 
-##COORELATION, Hour of Day and Money 
+## COORELATION, Hour of Day and Money 
 
 ```
 sns.regplot(x='hour_of_day', y='money', data=df_filtered, scatter=True, color = 'skyblue', line_kws={'color': 'blue'})
