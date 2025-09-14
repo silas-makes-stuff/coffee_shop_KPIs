@@ -61,10 +61,7 @@ df['cash_type'].str.count('cash').sum()
 
   https://super-duper-train-v6q7pr5555592jr5-8501.app.github.dev/ 
 
-  ### Uses: 
-
-
-  # Reflections and Future Directions
+  https://github.com/silas-makes-stuff/coffee_shop_KPIs/blob/main/dashboard%20code 
 
 ## Investigate 
 - Higher average transactions later in the day. Are customers buying more than one coffee (there with a friend) or buying a pastry with their coffee? This could help inform specials or products to push around this time.
