@@ -1,0 +1,255 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+st.set_page_config(page_title="Coffee Shop KPIs Dashboard", layout="wide")
+
+# Large dashboard title
+st.markdown("<h1 style='text-align: center; color: #ffb6c1; font-size: 3em;'>COFFEE SHOP KPIs.</h1>", unsafe_allow_html=True)
+
+
+# Load and clean data before KPIs
+data = pd.read_csv("coffee_sales_clean.csv")
+# Clean 'money' column and convert to float
+if 'money' in data.columns:
+    data['money'] = data['money'].replace('[\$, ]', '', regex=True).astype(float)
+
+
+
+
+
+# Slicer controls in sidebar
+st.sidebar.markdown("<h4 style='color:#d72660;'>Customize Dashboard</h4>", unsafe_allow_html=True)
+product_options = ['All'] + sorted(data['coffee_name'].unique()) if 'coffee_name' in data.columns else ['All']
+selected_product = st.sidebar.selectbox("Select Product", product_options, key="product_slicer")
+season_options = ['All', 'Summer', 'Autumn', 'Winter', 'Spring']
+selected_season = st.sidebar.selectbox("Select Season", season_options, key="season_slicer")
+date_min = pd.to_datetime(data['date']).min() if 'date' in data.columns else None
+date_max = pd.to_datetime(data['date']).max() if 'date' in data.columns else None
+selected_date = st.sidebar.date_input("Select Date Range", [date_min, date_max], key="date_slicer") if date_min and date_max else None
+
+# Filter data based on slicers
+filtered_data = data.copy()
+if selected_product != 'All' and 'coffee_name' in filtered_data.columns:
+    filtered_data = filtered_data[filtered_data['coffee_name'] == selected_product]
+if selected_season != 'All' and 'Month_name' in filtered_data.columns:
+    month_to_season = {
+        'Dec': 'Summer', 'Jan': 'Summer', 'Feb': 'Summer',
+        'Mar': 'Autumn', 'Apr': 'Autumn', 'May': 'Autumn',
+        'Jun': 'Winter', 'Jul': 'Winter', 'Aug': 'Winter',
+        'Sep': 'Spring', 'Oct': 'Spring', 'Nov': 'Spring'
+    }
+    filtered_data['Season'] = filtered_data['Month_name'].map(month_to_season)
+    filtered_data = filtered_data[filtered_data['Season'] == selected_season]
+if selected_date and 'date' in filtered_data.columns:
+    filtered_data['date'] = pd.to_datetime(filtered_data['date'])
+    filtered_data = filtered_data[(filtered_data['date'] >= pd.to_datetime(selected_date[0])) & (filtered_data['date'] <= pd.to_datetime(selected_date[1]))]
+
+
+
+# Tiled layout for KPIs and graphs
+col1, col2, col3 = st.columns(3)
+
+
+
+# Total profit KPI, total percent revenue growth, and sales over time
+with col1:
+    # KPIs row above sales over time
+    kpi_row = st.columns(2)
+    # Total Profit
+    if 'money' in filtered_data.columns:
+        total_profit = filtered_data['money'].sum()
+        kpi_row[0].metric(label="Total Profit ($)", value=f"{total_profit:,.2f}")
+    else:
+        kpi_row[0].warning("'money' column not found.")
+    # Total Revenue Growth
+    if 'date' in filtered_data.columns and 'money' in filtered_data.columns:
+        filtered_data['date'] = pd.to_datetime(filtered_data['date'])
+        sales_by_month = filtered_data.groupby(filtered_data['date'].dt.to_period('M'))['money'].sum().reset_index()
+        if len(sales_by_month) > 1:
+            first = sales_by_month['money'].iloc[0]
+            last = sales_by_month['money'].iloc[-1]
+            pct_growth_total = ((last - first) / first) * 100 if first != 0 else 0
+            kpi_row[1].metric(label="Total Revenue Growth (%)", value=f"{pct_growth_total:.2f}%")
+        else:
+            kpi_row[1].metric(label="Total Revenue Growth (%)", value="N/A")
+    else:
+        kpi_row[1].warning("Required columns ('date', 'money') not found.")
+
+    # Sales Over Time
+    if 'date' in filtered_data.columns and 'money' in filtered_data.columns:
+        st.subheader("Sales Over Time")
+        fig, ax = plt.subplots()
+        months = sales_by_month['date'].dt.strftime('%b')
+        years = sales_by_month['date'].dt.year.astype(str)
+        x = range(len(months))
+        ax.plot(x, sales_by_month['money'], color="#d72660", linewidth=2)
+        ax.set_xlabel('Month')
+        ax.set_ylabel('Sales ($)')
+        ax.set_title('Total Sales Over Time')
+        ax.set_xticks(x)
+        ax.set_xticklabels(months, rotation=0)
+        for i in range(1, len(years)):
+            if years[i] != years[i-1]:
+                ax.axvline(x[i]-0.5, color='#ffb6c1', linestyle='--', linewidth=1)
+                ax.text(x[i]-0.5, ax.get_ylim()[0], years[i], color='#d72660', fontsize=10, ha='center', va='bottom', fontweight='bold')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        for spine in ax.spines.values():
+            spine.set_edgecolor('#d72660')
+            spine.set_linewidth(1)
+        fig.patch.set_facecolor('#fff6fa')
+        st.pyplot(fig)
+        st.subheader("Busiest Time of Day")
+        if 'hour_of_day' in filtered_data.columns:
+            def time_of_day(hour):
+                if 5 <= hour < 12:
+                    return 'Morning'
+                elif 12 <= hour < 17:
+                    return 'Afternoon'
+                elif 17 <= hour < 21:
+                    return 'Evening'
+                else:
+                    return 'Night'
+            filtered_data['TimeOfDay'] = filtered_data['hour_of_day'].apply(time_of_day)
+            tod_counts = filtered_data['TimeOfDay'].value_counts().reindex(['Morning', 'Afternoon', 'Evening', 'Night']).fillna(0)
+            fig2, ax2 = plt.subplots()
+            ax2.bar(tod_counts.index, tod_counts.values, color="#d72660", edgecolor="#d72660")
+            ax2.set_xlabel('Time of Day')
+            ax2.set_ylabel('Number of Transactions')
+            ax2.set_title('Busiest Time of Day')
+            ax2.spines['top'].set_visible(False)
+            ax2.spines['right'].set_visible(False)
+            for spine in ax2.spines.values():
+                spine.set_edgecolor('#d72660')
+                spine.set_linewidth(1)
+            fig2.patch.set_facecolor('#fff6fa')
+            st.pyplot(fig2)
+        else:
+            st.warning("'hour_of_day' column not found in data.")
+    else:
+        st.warning("Required columns ('date', 'money') not found in data.")
+
+
+# Days of week breakdown with most popular product and season highlights
+with col2:
+    # Top KPIs for col2: Most/Least Popular Season
+    kpi_row2 = st.columns(2)
+    # Most Popular Season
+    if 'Month_name' in filtered_data.columns and 'money' in filtered_data.columns:
+        month_to_season = {
+            'Dec': 'Summer', 'Jan': 'Summer', 'Feb': 'Summer',
+            'Mar': 'Autumn', 'Apr': 'Autumn', 'May': 'Autumn',
+            'Jun': 'Winter', 'Jul': 'Winter', 'Aug': 'Winter',
+            'Sep': 'Spring', 'Oct': 'Spring', 'Nov': 'Spring'
+        }
+        filtered_data['Season'] = filtered_data['Month_name'].map(month_to_season)
+        season_sales = filtered_data.groupby('Season')['money'].sum().reindex(['Summer', 'Autumn', 'Winter', 'Spring'])
+        most_popular_season = season_sales.idxmax()
+        kpi_row2[0].metric(label="Most Popular Season", value=most_popular_season)
+    else:
+        kpi_row2[0].warning("Required columns ('Month_name', 'money') not found.")
+    # Busiest Time of Day
+    if 'hour_of_day' in filtered_data.columns:
+        def time_of_day(hour):
+            if 5 <= hour < 12:
+                return 'Morning'
+            elif 12 <= hour < 17:
+                return 'Afternoon'
+            elif 17 <= hour < 21:
+                return 'Evening'
+            else:
+                return 'Night'
+        filtered_data['TimeOfDay'] = filtered_data['hour_of_day'].apply(time_of_day)
+        tod_counts = filtered_data['TimeOfDay'].value_counts().reindex(['Morning', 'Afternoon', 'Evening', 'Night']).fillna(0)
+        busiest_tod = tod_counts.idxmax()
+        kpi_row2[1].metric(label="Busiest Time of Day", value=busiest_tod)
+    else:
+        kpi_row2[1].warning("'hour_of_day' column not found in data.")
+    st.subheader("Top Products")
+    if 'Weekday' in filtered_data.columns and 'money' in filtered_data.columns and 'coffee_name' in filtered_data.columns:
+        weekday_order = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        # Top products graph (was previously in col3)
+        top_products = filtered_data.groupby('coffee_name')['money'].sum().sort_values(ascending=False).head(10)
+        fig, ax = plt.subplots()
+        ax.bar(top_products.index, top_products.values, color="#d72660", edgecolor="#d72660")
+        ax.set_xlabel('Product')
+        ax.set_ylabel('Sales ($)')
+        ax.set_title('Top Products')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        for spine in ax.spines.values():
+            spine.set_edgecolor('#d72660')
+            spine.set_linewidth(1)
+        fig.patch.set_facecolor('#fff6fa')
+        plt.xticks(rotation=45, ha='right')
+        st.pyplot(fig)
+        # Most popular product each day
+        popular_products = filtered_data.groupby(['Weekday', 'coffee_name'])['money'].sum().reset_index()
+        most_popular = popular_products.sort_values(['Weekday', 'money'], ascending=[True, False]).groupby('Weekday').first().reindex(weekday_order)
+    # Removed subheader 'Top Products by Weekday'
+        table_df = most_popular[['coffee_name', 'money']].rename(columns={'coffee_name': 'Top Product', 'money': 'Sales ($)'})
+        table_df['Sales ($)'] = table_df['Sales ($)'].apply(lambda x: f"{x:.2f}".rstrip('0').rstrip('.') if '.' in f"{x:.2f}" else f"{x:.2f}")
+        st.table(table_df)
+    else:
+        st.warning("Required columns ('Weekday', 'money', 'coffee_name') not found.")
+
+
+
+# Top products tile and seasons breakdown
+with col3:
+    # KPI widget above Sales by Day of Week
+    kpi_row3 = st.columns(2)
+    if 'Weekday' in filtered_data.columns and 'money' in filtered_data.columns:
+        weekday_order = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        weekday_sales = filtered_data.groupby('Weekday')['money'].sum().reindex(weekday_order)
+        most_popular_day = weekday_sales.idxmax()
+        kpi_row3[0].metric(label="Most Popular Day", value=most_popular_day)
+        # Add second KPI for most popular product
+        if 'coffee_name' in filtered_data.columns and 'money' in filtered_data.columns:
+            product_sales = filtered_data.groupby('coffee_name')['money'].sum().sort_values(ascending=False)
+            most_popular_product = product_sales.idxmax()
+            kpi_row3[1].metric(label="Most Popular Product", value=most_popular_product)
+        else:
+            kpi_row3[1].warning("Required columns ('coffee_name', 'money') not found.")
+        st.subheader("Sales by Day of Week")
+        fig, ax = plt.subplots()
+        ax.bar(weekday_order, weekday_sales, color="#d72660", edgecolor="#d72660")
+        ax.set_xlabel('Weekday')
+        ax.set_ylabel('Sales ($)')
+        ax.set_title('Sales by Day of Week')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        for spine in ax.spines.values():
+            spine.set_edgecolor('#d72660')
+            spine.set_linewidth(1)
+        fig.patch.set_facecolor('#fff6fa')
+        st.pyplot(fig)
+    else:
+        kpi_row3[0].warning("Required columns ('Weekday', 'money') not found.")
+    # Seasons breakdown
+    st.subheader("Revenue by Season")
+    if 'Month_name' in filtered_data.columns and 'money' in filtered_data.columns:
+        month_to_season = {
+            'Dec': 'Summer', 'Jan': 'Summer', 'Feb': 'Summer',
+            'Mar': 'Autumn', 'Apr': 'Autumn', 'May': 'Autumn',
+            'Jun': 'Winter', 'Jul': 'Winter', 'Aug': 'Winter',
+            'Sep': 'Spring', 'Oct': 'Spring', 'Nov': 'Spring'
+        }
+        filtered_data['Season'] = filtered_data['Month_name'].map(month_to_season)
+        season_sales = filtered_data.groupby('Season')['money'].sum().reindex(['Summer', 'Autumn', 'Winter', 'Spring'])
+        fig, ax = plt.subplots()
+        ax.bar(season_sales.index, season_sales.values, color="#d72660", edgecolor="#d72660")
+        ax.set_xlabel('Season')
+        ax.set_ylabel('Sales ($)')
+        ax.set_title('Revenue by Season')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        for spine in ax.spines.values():
+            spine.set_edgecolor('#d72660')
+            spine.set_linewidth(1)
+        fig.patch.set_facecolor('#fff6fa')
+        st.pyplot(fig)
+    else:
+        st.warning("Required columns ('Month_name', 'money') not found in data.")
