@@ -57,13 +57,9 @@ df['cash_type'].str.count('cash').sum()
 - Customers spend the least amount of money per transaction in August, July, and September. 
 - Most popular drink is a Americano with Milk followed closely by Latte.
 
-  # Dashboards
+  # Dashboard
 
-  ## Excel
-
-
-  ## Tableau
-
+  https://super-duper-train-v6q7pr5555592jr5-8501.app.github.dev/ 
 
   ### Uses: 
 
