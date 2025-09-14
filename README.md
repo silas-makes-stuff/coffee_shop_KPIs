@@ -1,5 +1,5 @@
 # coffee_shop_KPIs
-
+ 
 ## **Goal**
 Clean, transform, analyze and visualize coffee shop data for Key Performance Indicators.
 
