@@ -18,7 +18,7 @@ Dataset captures sales transcations from a coffee shop in Cape Town, South Afric
 Data cleaning, exploratory data analysis (EDA), data manipulation, data visualization
 
 ## Technology
-Excel, Python
+Excel, Python, Copilot (dashboard)
 
 # Cleaning, Refining, EDA
 
@@ -58,9 +58,10 @@ df['cash_type'].str.count('cash').sum()
 - Most popular drink is a Americano with Milk followed closely by Latte.
 
   # Dashboard
-
+ ## Dashboard
   https://super-duper-train-v6q7pr5555592jr5-8501.app.github.dev/ 
 
+## Dashboard Code
   https://github.com/silas-makes-stuff/coffee_shop_KPIs/blob/main/dashboard%20code 
 
 ## Investigate 
