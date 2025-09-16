@@ -59,7 +59,7 @@ df['cash_type'].str.count('cash').sum()
 
   # Dashboard
  ## Dashboard
-  https://super-duper-train-v6q7pr5555592jr5-8501.app.github.dev/ 
+https://super-duper-train-v6q7pr5555592jr5-8501.app.github.dev/
 
 ## Dashboard Code
   https://github.com/silas-makes-stuff/coffee_shop_KPIs/blob/main/dashboard%20code 
